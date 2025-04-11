@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>README Generator</title>
+    <!-- CSS -->
+    <link href="./styles.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="container flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-book-open text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold">README Generator</h1>
+            </div>
+            <div class="flex space-x-4">
+                <button id="themeToggle" class="btn-sm rounded-full p-2">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="https://github.com/litance" target="_blank" class="flex items-center">
+                    <i class="fab fa-github mr-1"></i>
+                    <span>litance</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container p-4 mb-10">
+        <div class="card mb-6 text-center">
+            <h2 class="text-2xl font-bold mb-2" style="color: var(--color-primary);">README.md Generator</h2>
+            <p style="color: var(--color-gray-600);">Create beautiful documentation for your projects with ease</p>
+        </div>
+        
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Left side form -->
+            <div class="w-full lg:w-1/2">
+                <div id="formTabs" class="tabs mb-4">
+                    <button class="tab-btn active" data-tab="basic">
+                        <i class="fas fa-info-circle mr-2"></i>Basic Info
+                    </button>
+                    <button class="tab-btn" data-tab="details">
+                        <i class="fas fa-list-alt mr-2"></i>Details
+                    </button>
+                    <button class="tab-btn" data-tab="media">
+                        <i class="fas fa-images mr-2"></i>Media
+                    </button>
+                    <button class="tab-btn" data-tab="advanced">
+                        <i class="fas fa-cogs mr-2"></i>Advanced
+                    </button>
+                </div>
+
+                <div class="card">
+                    <form id="readmeForm">
+                        <!-- Basic Info Tab -->
+                        <div id="basic" class="tab-content active">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="projectName">
+                                        <i class="fas fa-project-diagram mr-2"></i>Project Name
+                                    </label>
+                                    <input type="text" id="projectName" name="projectName">
+                                </div>
+                                
+                                <div>
+                                    <label for="description">
+                                        <i class="fas fa-align-left mr-2"></i>Description
+                                    </label>
+                                    <textarea id="description" name="description" rows="3"></textarea>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="author">
+                                            <i class="fas fa-user mr-2"></i>Author
+                                        </label>
+                                        <input type="text" id="author" name="author">
+                                    </div>
+                                    <div>
+                                        <label for="version">
+                                            <i class="fas fa-code-branch mr-2"></i>Version
+                                        </label>
+                                        <input type="text" id="version" name="version" placeholder="1.0.0">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="badges">
+                                        <i class="fas fa-certificate mr-2"></i>Badges
+                                    </label>
+                                    <div class="mb-2 flex flex-wrap gap-2" id="badgesPreview"></div>
+                                    <div class="flex flex-wrap gap-2 mb-2">
+                                        <button type="button" class="badge badge-blue badge-btn" data-badge="npm">npm</button>
+                                        <button type="button" class="badge badge-green badge-btn" data-badge="license">License</button>
+                                        <button type="button" class="badge badge-yellow badge-btn" data-badge="stars">Stars</button>
+                                        <button type="button" class="badge badge-purple badge-btn" data-badge="issues">Issues</button>
+                                        <button type="button" class="badge badge-red badge-btn" data-badge="build">Build</button>
+                                        <button type="button" class="badge badge-indigo badge-btn" data-badge="coverage">Coverage</button>
+                                    </div>
+                                    <input type="hidden" id="selectedBadges" name="selectedBadges" value="">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-primary next-tab" data-next="details">
+                                    Next <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Details Tab -->
+                        <div id="details" class="tab-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="installation">
+                                        <i class="fas fa-download mr-2"></i>Installation Command
+                                    </label>
+                                    <input type="text" id="installation" name="installation" placeholder="npm install my-package" class="font-mono">
+                                </div>
+                                
+                                <div>
+                                    <label for="usage">
+                                        <i class="fas fa-code mr-2"></i>Usage Code
+                                    </label>
+                                    <textarea id="usage" name="usage" rows="3" placeholder="const myPackage = require('my-package');" class="font-mono"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label>
+                                        <i class="fas fa-list-ul mr-2"></i>Project Features
+                                    </label>
+                                    <div id="featuresContainer" class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input type="text" class="feature-input">
+                                            <button type="button" class="btn-sm remove-feature ml-2" style="color: var(--color-danger);" hidden>
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addFeature" class="mt-2 btn btn-outline py-1" style="color: var(--color-primary); background-color: #e0e7ff;">
+                                        <i class="fas fa-plus mr-2"></i> Add Feature
+                                    </button>
+                                </div>
+                                
+                                <div>
+                                    <label for="structure">
+                                        <i class="fas fa-folder-tree mr-2"></i>Project Structure
+                                    </label>
+                                    <textarea id="structure" name="structure" rows="4" placeholder="src/&#10;  index.js&#10;  utils/&#10;    helpers.js" class="font-mono"></textarea>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between">
+                                <button type="button" class="btn btn-outline prev-tab" data-prev="basic">
+                                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                                </button>
+                                <button type="button" class="btn btn-primary next-tab" data-next="media">
+                                    Next <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Media Tab -->
+                        <div id="media" class="tab-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <label>
+                                        <i class="fas fa-image mr-2"></i>Screenshots URLs
+                                    </label>
+                                    <div id="screenshotsContainer" class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input type="text" class="screenshot-input" placeholder="https://example.com/screenshot.png">
+                                            <button type="button" class="btn-sm remove-screenshot ml-2" style="color: var(--color-danger);" hidden>
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addScreenshot" class="mt-2 btn btn-outline py-1" style="color: var(--color-primary); background-color: #e0e7ff;">
+                                        <i class="fas fa-plus mr-2"></i> Add Screenshot URL
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <label>
+                                        <i class="fas fa-image mr-2"></i>Demo GIF URL
+                                    </label>
+                                    <input type="text" id="demoGif" name="demoGif" placeholder="https://example.com/demo.gif">
+                                </div>
+
+                                <div>
+                                    <label>
+                                        <i class="fas fa-link mr-2"></i>Live Demo URL
+                                    </label>
+                                    <input type="text" id="liveDemo" name="liveDemo" placeholder="https://example.com/demo">
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between">
+                                <button type="button" class="btn btn-outline prev-tab" data-prev="details">
+                                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                                </button>
+                                <button type="button" class="btn btn-primary next-tab" data-next="advanced">
+                                    Next <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Tab -->
+                        <div id="advanced" class="tab-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="license">
+                                        <i class="fas fa-gavel mr-2"></i>License
+                                    </label>
+                                    <select id="license" name="license">
+                                        <option value="MIT">MIT</option>
+                                        <option value="Apache-2.0">Apache 2.0</option>
+                                        <option value="GPL-3.0">GPL 3.0</option>
+                                        <option value="BSD-3-Clause">BSD 3-Clause</option>
+                                        <option value="ISC">ISC</option>
+                                        <option value="None">None</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="contributing">
+                                        <i class="fas fa-users mr-2"></i>Contribution Guidelines
+                                    </label>
+                                    <textarea id="contributing" name="contributing" rows="3"></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="dependencies">
+                                        <i class="fas fa-cube mr-2"></i>Dependencies
+                                    </label>
+                                    <textarea id="dependencies" name="dependencies" rows="3" placeholder="- express: ^4.17.1&#10;- mongoose: ^6.0.12&#10;- dotenv: ^10.0.0" class="font-mono"></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="acknowledgements">
+                                        <i class="fas fa-hands-helping mr-2"></i>Acknowledgements
+                                    </label>
+                                    <textarea id="acknowledgements" name="acknowledgements" rows="3" placeholder="- Thanks to [name](link) for their inspiration"></textarea>
+                                </div>
+
+                                <div>
+                                    <label for="template">
+                                        <i class="fas fa-file-alt mr-2"></i>Template Style
+                                    </label>
+                                    <select id="template" name="template">
+                                        <option value="standard">Standard</option>
+                                        <option value="minimal">Minimal</option>
+                                        <option value="detailed">Detailed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between">
+                                <button type="button" class="btn btn-outline prev-tab" data-prev="media">
+                                    <i class="fas fa-arrow-left mr-2"></i> Previous
+                                </button>
+                                <div class="flex space-x-2">
+                                    <button type="button" id="previewBtn" class="btn btn-success lg:hidden">
+                                        <i class="fas fa-eye mr-2"></i> Preview
+                                    </button>
+                                    <button type="button" id="resetBtn" class="btn" style="background-color: var(--color-gray-500); color: white;">
+                                        <i class="fas fa-redo-alt mr-2"></i> Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card mt-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium mb-2 md:mb-0">
+                            <i class="fas fa-file-download mr-2" style="color: var(--color-primary);"></i>Export Options
+                        </h3>
+                        <div class="flex space-x-3">
+                            <button id="copyBtn" class="btn btn-primary">
+                                <i class="fas fa-copy mr-2"></i> Copy Markdown
+                            </button>
+                            <button id="downloadBtn" class="btn btn-success">
+                                <i class="fas fa-download mr-2"></i> Download README.md
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right side preview -->
+            <div class="w-full lg:w-1/2 relative">
+                <div class="sticky">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-semibold">
+                            <i class="fas fa-eye mr-2" style="color: var(--color-primary);"></i>Preview
+                        </h2>
+                        <div class="flex space-x-2">
+                            <button id="toggleRaw" class="btn btn-sm btn-outline">
+                                <i class="fas fa-code mr-1"></i> Toggle Raw
+                            </button>
+                            <button id="printPreview" class="btn btn-sm btn-outline">
+                                <i class="fas fa-print mr-1"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                    <div id="previewContainer" class="card mb-4">
+                        <div id="preview" class="prose"></div>
+                    </div>
+                    <div id="rawPreview" class="hidden mb-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-10">
+            <h3 class="text-xl font-semibold mb-4" style="color: var(--color-primary);">Templates</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="border p-4 rounded-md" style="border-color: var(--color-gray-200); cursor: pointer;" data-template="simple">
+                    <h4 class="font-medium mb-2">Simple Project</h4>
+                    <p class="text-sm" style="color: var(--color-gray-600);">A basic template for simple projects with minimal sections.</p>
+                </div>
+                <div class="border p-4 rounded-md" style="border-color: var(--color-gray-200); cursor: pointer;" data-template="fullstack">
+                    <h4 class="font-medium mb-2">Full Stack App</h4>
+                    <p class="text-sm" style="color: var(--color-gray-600);">Comprehensive template for full-stack applications with frontend and backend details.</p>
+                </div>
+                <div class="border p-4 rounded-md" style="border-color: var(--color-gray-200); cursor: pointer;" data-template="library">
+                    <h4 class="font-medium mb-2">JavaScript Library</h4>
+                    <p class="text-sm" style="color: var(--color-gray-600);">Perfect for NPM packages and libraries with API documentation sections.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">© 2025 README Generator. All rights reserved.</p>
+                    <p class="text-xs" style="color: var(--color-gray-400);">Built with <i class="fas fa-heart" style="color: var(--color-danger);"></i> by litance</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" style="color: var(--color-gray-400);"><i class="fab fa-github"></i></a>
+                    <a href="#" style="color: var(--color-gray-400);"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: var(--color-gray-400);"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load the main JavaScript file -->
+    <script src="./script.js"></script>
+</body>
+</html>
